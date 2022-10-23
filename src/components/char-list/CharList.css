@@ -1,0 +1,6 @@
+.char-list {
+  height: 100%;
+  display: grid;
+  grid-gap: 3px;
+  grid-template-columns: repeat(3, 1fr);
+}
