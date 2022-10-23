@@ -1,7 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const get = (url) => {
-  return axios.get(url);
-}
+const get = (url) => axios.get(url);
 
-export default { get }
+export default { get };
