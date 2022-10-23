@@ -6,32 +6,41 @@ import characterRepository from '../../repositories/character.repository';
 
 
 const Characters = () => {
-
-  const [data, setData] = useState(null);
-  const [status, setStatus] = useState('LOADING')
+  const [data, setData] = useState({
+    characters: null,
+    status: "LOADING"
+  });
 
   useEffect(() => {
     setTimeout(getDataCaharacters, "3000")
   }, [])
 
   const getDataCaharacters = async () => {
-    setStatus('LOADING');
+    setData({
+      ...data,
+      status: "LOADING"
+    });
     try {
       const res = await characterRepository.getAllCharacter();
-      setStatus('SUCCESS')
-      setData([...res.data.results])
+      setData({
+        characters: [...res.data.results],
+        status: "SUCCESS"
+      });
     } catch (error) {
-      setStatus('ERROR')
+      setData({
+        ...data,
+        status: "ERROR"
+      });
     }
   }
 
   const ConditioningComponent = () => {
 
-    switch (status) {
+    switch (data.status) {
       case 'LOADING':
         return <Loading />
       case 'SUCCESS':
-        return <CharList data={data} />
+        return <CharList data={data.characters} />
       case 'ERROR':
         return <ErrorComponent onRefresh={getDataCaharacters} />
       default:
