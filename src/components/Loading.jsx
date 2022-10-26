@@ -1,8 +1,8 @@
 import reactLogo from '../assets/react.svg';
 
-function Loading() {
+function Loading({ height, width }) {
   return (
-    <div className="Loading">
+    <div className="Loading" style={{ height, width }}>
       <img src={reactLogo} className="logo react" alt="React logo" />
     </div>
   );

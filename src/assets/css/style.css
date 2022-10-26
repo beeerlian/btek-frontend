@@ -87,3 +87,22 @@
 button {
   margin: 1rem 1rem;
 }
+
+.buttonload {
+  background-color: #04AA6D;
+  /* Green background */
+  border: none;
+  /* Remove borders */
+  color: white;
+  /* White text */
+  padding: 12px 16px;
+  /* Some padding */
+  font-size: 16px
+    /* Set a font size */
+}
+
+.form-error-msg {
+  font-size: 10px;
+  font-style: italic;
+  color: red;
+}
