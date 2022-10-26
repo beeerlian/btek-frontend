@@ -45,7 +45,9 @@ function Profile() {
       <div className="profile">
         <ProfileTile title="Name" data={data?.profile?.fullName} />
         <ProfileTile title="Birth Date" data={data?.profile?.birthDate} />
-        <ProfileTile title="Picture" data={data?.profile?.picture} />
+        <ProfileTile title="Picture" data="" />
+        <img src={data?.profile?.picture} alt={data?.profile?.fullName} />
+        <br />
         <BackButton />
         <button type="button" onClick={() => { navigate('/profile/edit', { state: data.profile }); }}>Edit</button>
       </div>
@@ -60,7 +62,7 @@ function ProfileTile({ title, data }) {
       {' '}
       :
       {' '}
-      {data || 'Kosong'}
+      {data || ''}
     </div>
   );
 }

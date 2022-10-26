@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
 import MyButton from '../components/buttons/MyButton';
 import profileRepo from '../repositories/profile.repo';
 import BackButton from '../components/buttons/BackButton';
@@ -13,17 +14,16 @@ function EditProfile() {
     status: 'INITIAL',
   });
 
-  const updateProfile = async (e) => {
-    e.preventDefault();
+  const updateProfile = async ({ fullName, picture, birthDate }) => {
     setData({
       ...data,
       status: 'LOADING',
     });
     try {
       const form = {
-        fullName: e.target.fullName.value,
-        picture: e.target.picture.value,
-        birthDate: e.target.birthDate.value,
+        fullName,
+        picture,
+        birthDate,
       };
       const encoded = new URLSearchParams(form);
       await profileRepo.updateProfile(encoded.toString());
@@ -41,17 +41,37 @@ function EditProfile() {
       {(data.status === 'ERROR')
         ? <p>Error</p> : null}
       <div>Edit Profile</div>
-      <form onSubmit={updateProfile}>
-        <input type="text" name="fullName" value={location.state.fullName} />
-        <br />
-        <input type="text" name="picture" value={location.state.picture} />
-        <br />
-        <input type="text" name="birthDate" value={location.state.birthDate} />
-        <br />
-        <BackButton />
-        <MyButton type="submit" isLoading={data.status === 'LOADING'}>Save</MyButton>
-      </form>
+      <EditProfileForm status={data.status} onSubmit={updateProfile} />
+      <BackButton />
     </div>
+  );
+}
+
+function EditProfileForm({ onSubmit, status }) {
+  return (
+    <Formik
+      initialValues={{
+        fullName: '',
+        picture: '',
+        birthDate: '',
+      }}
+      onSubmit={onSubmit}
+    >
+      {({ errors, touched }) => (
+        <Form>
+          <Field name="fullName" type="text" placeholder="fullName" />
+          {errors.fullName && touched.fullName ? <div className="form-error-msg">{errors.fullName}</div> : null}
+          <br />
+          <Field name="picture" type="text" placeholder="Picture" />
+          {errors.picture && touched.picture ? (<div className="form-error-msg">{errors.picture}</div>) : null}
+          <br />
+          <Field name="birthDate" type="text" placeholder="Birt Date" />
+          {errors.birthDate && touched.birthDate ? (<div className="form-error-msg">{errors.birthDate}</div>) : null}
+          <br />
+          <MyButton type="submit" isLoading={status === 'LOADING'}>Save</MyButton>
+        </Form>
+      )}
+    </Formik>
   );
 }
 
