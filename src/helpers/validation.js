@@ -35,4 +35,10 @@ const EmailSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
 });
 
-export default { EmailPassSchema, EmailSchema, ResetPassSchema };
+const ProfileSchema = Yup.object().shape({
+  fullName: Yup.string().required('Required'),
+});
+
+export default {
+  EmailPassSchema, EmailSchema, ResetPassSchema, ProfileSchema,
+};

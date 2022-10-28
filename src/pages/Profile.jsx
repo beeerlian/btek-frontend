@@ -19,6 +19,7 @@ function Profile() {
     });
     try {
       const res = await profileRepo.getProfile();
+      console.log(res.data);
       setData({
         profile: res.data.result,
         status: 'SUCCESS',
@@ -46,7 +47,7 @@ function Profile() {
         <ProfileTile title="Name" data={data?.profile?.fullName} />
         <ProfileTile title="Birth Date" data={data?.profile?.birthDate} />
         <ProfileTile title="Picture" data="" />
-        <img src={data?.profile?.picture} alt={data?.profile?.fullName} />
+        <img className="profile-image" src={`http://localhost:8081/assets/uploads/${data?.profile?.picture}`} alt={data?.profile?.fullName} />
         <br />
         <BackButton />
         <button type="button" onClick={() => { navigate('/profile/edit', { state: data.profile }); }}>Edit</button>

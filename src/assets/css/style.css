@@ -106,3 +106,9 @@ button {
   font-style: italic;
   color: red;
 }
+
+.profile-image {
+  width: 50%;
+  height: 50%;
+  border-radius: 13px;
+}
