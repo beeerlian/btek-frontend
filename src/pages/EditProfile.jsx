@@ -1,56 +1,41 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
-import FormData from 'form-data';
+import * as profileAction from '../redux/asyncActions/profile';
 import MyButton from '../components/buttons/MyButton';
-import profileRepo from '../repositories/profile.repo';
 import BackButton from '../components/buttons/BackButton';
 
 function EditProfile() {
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state.profile);
   const location = useLocation();
-  const navigate = useNavigate();
-  const [data, setData] = useState({
-    profile: location.state,
-    status: 'INITIAL',
-    errMsg: '',
-  });
 
-  const updateProfile = async (val) => {
-    setData({
-      ...data,
-      status: 'LOADING',
-    });
-    try {
-      const { fullName, image, birthDate } = val;
-      const form = new FormData();
-      form.append('fullName', fullName);
-      form.append('picture', image);
-      form.append('birthDate', birthDate);
-      await profileRepo.updateProfile(form);
-      navigate(-1);
-    } catch (error) {
-      setData({
-        ...data,
-        status: 'ERROR',
-        errMsg: error.response.data.message,
-      });
-    }
+  const navigate = useNavigate();
+
+  const updateProfile = (val) => {
+    dispatch(profileAction.updateProfile(val));
   };
+
+  useEffect(() => {
+    if (store.status === `${profileAction.updateProfileActionType}/fulfilled`) {
+      navigate(-1);
+    }
+  }, [store]);
 
   return (
     <div className="edit-profile">
-      {(data.status === 'ERROR')
-        ? <p>{data.errMsg}</p> : null}
+      <img className="profile-image" src={`http://localhost:8081/assets/uploads/${location.state?.picture}`} alt={store.profile?.fullName} />
+      {(store.status === `${profileAction.updateProfileActionType}/rejected`)
+        ? <p>{store.errMsg}</p> : null}
       <div>Edit Profile</div>
-      <EditProfileForm status={data.status} onSubmit={updateProfile} initial={data.profile} />
+      <EditProfileForm status={store.status} onSubmit={updateProfile} initial={location.state} />
       <BackButton />
     </div>
   );
 }
 
 function EditProfileForm({ onSubmit, status, initial }) {
-  console.log(initial);
   const [image, setImage] = useState(null);
   const onImagePicked = (e) => {
     const file = e.target.files[0];
@@ -79,7 +64,7 @@ function EditProfileForm({ onSubmit, status, initial }) {
           <Field name="birthDate" type="text" placeholder="Birt Date" />
           {errors.birthDate && touched.birthDate ? (<div className="form-error-msg">{errors.birthDate}</div>) : null}
           <br />
-          <MyButton type="submit" isLoading={status === 'LOADING'}>Save</MyButton>
+          <MyButton type="submit" isLoading={status === 'pending'}>Save</MyButton>
         </Form>
       )}
     </Formik>

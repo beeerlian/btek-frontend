@@ -1,48 +1,43 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import * as authAction from '../redux/asyncActions/auth';
+import * as authReducersAction from '../redux/reducers/auth';
 import * as Validation from '../helpers/validation';
 import MyButton from '../components/buttons/MyButton';
 import MyDialog from '../components/MyDialog';
 
-import auth from '../repositories/auth.repo';
-
 function Login() {
-  const [state, setState] = useState({ status: 'INITIAL' });
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const submitAction = async ({ email, password }) => {
-    setState({ status: 'LOADING' });
-    try {
-      const form = {
-        email,
-        password,
-      };
-      const encoded = new URLSearchParams(form);
-      const res = await auth.login(encoded.toString());
-      window.localStorage.setItem('token', res.data.access_token);
-      navigate('/');
-    } catch (error) {
-      setState({
-        errMsg: error.response.data.message,
-        status: 'ERROR',
-      });
-    }
+  const submitAction = async (val) => {
+    dispatch(authAction.login(val));
   };
 
   const toRegister = () => {
     navigate('/register');
   };
 
+  useEffect(() => {
+    if (store.status === `${authAction.loginActionType}/fulfilled`) {
+      localStorage.setItem('token', store.data.access_token);
+      dispatch(authReducersAction.handleReset());
+      navigate('/');
+    }
+  }, [store.status]);
+
   return (
     <>
       <div className="heading">Login</div>
       <div>
-        <LoginForm onSubmit={submitAction} status={state.status} />
+        <LoginForm onSubmit={submitAction} status={store.status} />
       </div>
       <button type="button" onClick={toRegister}>Register</button>
       <Link to="/forgot-password">forgot password</Link>
-      <MyDialog open={state.status === 'ERROR'} title="Login Gagal" desc={state.errMsg} handleToClose={() => { setState({ status: 'INITIAL' }); }} />
+      <MyDialog open={store.status === `${authAction.loginActionType}/rejected`} title="Login Gagal" desc={store.error?.message} handleToClose={() => { dispatch(); }} />
     </>
   );
 }
