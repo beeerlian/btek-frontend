@@ -19,8 +19,13 @@ export const login = createAsyncThunk(
 export const registerActionType = 'auth/register';
 export const register = createAsyncThunk(
   'auth/register',
-  async (body) => {
-    const { data } = await authService.register(body);
+  async ({ email, password }) => {
+    const form = {
+      email,
+      password,
+    };
+    const encoded = new URLSearchParams(form);
+    const { data } = await authService.register(encoded.toString());
     return data;
   },
 );
@@ -28,8 +33,12 @@ export const register = createAsyncThunk(
 export const forgotPasswordActionType = 'auth/forgotPassword';
 export const forgotPassword = createAsyncThunk(
   'auth/forgotPassword',
-  async (body) => {
-    const { data } = await authService.forgotPassword(body);
+  async ({ email }) => {
+    const form = {
+      email,
+    };
+    const encoded = new URLSearchParams(form);
+    const { data } = await authService.forgotPassword(encoded.toString());
     return data;
   },
 );
@@ -37,8 +46,17 @@ export const forgotPassword = createAsyncThunk(
 export const resetPasswordActionType = 'auth/resetPassword';
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
-  async (body) => {
-    const { data } = await authService.resetPassword(body);
+  async ({
+    email, code, newPassword, confirmPassword,
+  }) => {
+    const form = {
+      email,
+      code,
+      newPassword,
+      confirmPassword,
+    };
+    const encoded = new URLSearchParams(form);
+    const { data } = await authService.resetPassword(encoded.toString());
     return data;
   },
 );

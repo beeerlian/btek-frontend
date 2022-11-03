@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import CenteredCard from '../components/card/CenteredCard';
+import Button from '../components/buttons/Button';
 
 function Home() {
   const navigate = useNavigate();
@@ -7,11 +9,13 @@ function Home() {
     navigate('./login', { replace: true });
   };
   return (
-    <>
-      <div className="heading">Wellcome</div>
-      <button type="button" onClick={logout}>Logout</button>
-      <button type="button" onClick={() => { navigate('/profile'); }}>Profile</button>
-    </>
+    <CenteredCard>
+      <div>
+        <div className="card-title mb-6">Wellcome</div>
+        <Button type="button" onClick={logout}>Logout</Button>
+        <Button type="button" onClick={() => { navigate('/profile'); }}>Profile</Button>
+      </div>
+    </CenteredCard>
   );
 }
 

@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MyButton from './buttons/Button';
 
 export default function MyDialog({
-  open, handleToClose, title, desc,
+  open, handleToClose, title, desc, buttonText,
 }) {
   return (
     <Dialog open={open} onClose={handleToClose}>
@@ -22,7 +22,7 @@ export default function MyDialog({
           onClick={handleToClose}
           autoFocus
         >
-          Close
+          {buttonText ?? 'Close'}
         </MyButton>
       </DialogActions>
     </Dialog>

@@ -7,6 +7,9 @@ import * as profileAction from '../redux/asyncActions/profile';
 import ConditioningRender from '../components/ConditioningRender';
 import BackButton from '../components/buttons/BackButton';
 
+import Button from '../components/buttons/Button';
+import CenteredCard from '../components/card/CenteredCard';
+
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,29 +32,25 @@ function Profile() {
       actionType={`${profileAction.getProfileActionType}`}
       errMessage={store.error?.message}
     >
-      <div className="profile">
-        <ProfileTile title="Name" data={store.profile?.fullName} />
-        <ProfileTile title="Birth Date" data={store.profile?.birthDate} />
-        <ProfileTile title="Picture" data="" />
-        <img className="profile-image" src={`http://localhost:8081/assets/uploads/${store.profile?.picture}`} alt={store.profile?.fullName} />
-        <br />
-        <BackButton />
-        <button type="button" onClick={() => { navigate('/profile/edit', { state: store.profile }); }}>Edit</button>
-      </div>
+      <CenteredCard>
+        <div className="place-items-center">
+          <div className="avatar self-center">
+            <div className=" rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 self-center">
+              <img src={`http://localhost:8081/assets/uploads/${store.profile?.picture}`} alt={store.profile?.fullName} />
+            </div>
+          </div>
+          <div className="card-body items-center text-center">
+            <h2 className="card-title">{store.profile?.fullName}</h2>
+            <p>{store.profile?.birthDate}</p>
+            <div className="card-actions justify-end">
+              <BackButton>Back</BackButton>
+              <Button className="btn btn-primary" onClick={() => { navigate('/profile/edit', { state: store.profile }); }}>Edit</Button>
+            </div>
+          </div>
+        </div>
+
+      </CenteredCard>
     </ConditioningRender>
   );
 }
-
-function ProfileTile({ title, data }) {
-  return (
-    <div>
-      {title}
-      {' '}
-      :
-      {' '}
-      {data || ''}
-    </div>
-  );
-}
-
 export default Profile;

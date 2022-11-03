@@ -1,62 +1,63 @@
 /* eslint-disable no-nested-ternary */
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
-import authRepo from '../repositories/auth.repo';
 import * as Validation from '../helpers/validation';
 import BackButton from '../components/buttons/BackButton';
 import Button from '../components/buttons/Button';
 import MyDialog from '../components/MyDialog';
 import CenteredCard from '../components/card/CenteredCard';
+import Alert from '../components/alert/Alert';
+import * as authAction from '../redux/asyncActions/auth';
+import * as authReducersAction from '../redux/reducers/auth';
 
 function ForgotPassword() {
   const navigate = useNavigate();
-  const [state, setState] = useState({ message: '', status: 'INITIAL' });
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state.auth);
 
-  const forgotPassword = async ({ email }) => {
-    try {
-      setState({ message: '', status: 'LOADING' });
-      const form = { email };
-      const encoded = new URLSearchParams(form);
-      const res = await authRepo.forgotPassword(encoded.toString());
-      setState({
-        message: res.data.message,
-        status: 'SUCCESS',
-      });
-    } catch (error) {
-      setState({
-        message: error.response.data.message || toString(error),
-        status: 'ERROR',
-      });
-    }
+  const forgotPassword = async (val) => {
+    dispatch(authAction.forgotPassword(val));
   };
 
   const handleCloseDialog = () => {
-    if (state.status === 'SUCCESS') {
-      navigate('/reset-password');
-    } else if (state.status === 'ERROR') {
-      setState({ status: 'INITIAL' });
-    }
+    dispatch(authReducersAction.handleReset());
+    navigate('/reset-password', { replace: true });
   };
 
+  useEffect(() => {
+    if (store.status === `${authAction.forgotPasswordActionType}/rejected`) {
+      setTimeout(() => {
+        dispatch(authReducersAction.handleReset());
+      }, 1500);
+    }
+  }, [store.status]);
+
   return (
-    <CenteredCard>
-      <div>
-        <div className="card-title">Forgot Password</div>
-        <ForgotPasswordForm onSubmit={forgotPassword} status={state.status} />
-        <BackButton />
-        <MyDialog
-          open={state.status === 'ERROR' || state.status === 'SUCCESS'}
-          title={state.status === 'ERROR' ? 'Opps' : state.status === 'SUCCESS' ? 'Success' : ''}
-          desc={state.message}
-          handleToClose={handleCloseDialog}
-        />
-      </div>
-    </CenteredCard>
+    <>
+      {store.status === `${authAction.forgotPasswordActionType}/rejected` ? (
+        <Alert type="alert-error">{`Forgot Password Failed ${store.error?.message}`}</Alert>
+      ) : null}
+      <CenteredCard>
+        <div>
+          <div className="card-title">Forgot Password</div>
+          <ForgotPasswordForm onSubmit={forgotPassword} isLoading={store.status === `${authAction.forgotPasswordActionType}/pending`} />
+          <BackButton />
+          <MyDialog
+            open={store.status === `${authAction.forgotPasswordActionType}/fulfilled`}
+            title="Success"
+            desc="We've sent reset password code to your email, please check your email"
+            buttonText="Oke"
+            handleToClose={handleCloseDialog}
+          />
+        </div>
+      </CenteredCard>
+    </>
   );
 }
 
-function ForgotPasswordForm({ onSubmit, status }) {
+function ForgotPasswordForm({ onSubmit, isLoading }) {
   return (
     <Formik
       initialValues={{
@@ -67,10 +68,10 @@ function ForgotPasswordForm({ onSubmit, status }) {
     >
       {({ errors, touched }) => (
         <Form>
-          <Field className="form" name="email" type="email" />
+          <Field className="form" name="email" type="email" placeholder="Email" />
           {errors.email && touched.email ? <div className="form-error-msg">{errors.email}</div> : null}
           <br />
-          <Button type="submit" isLoading={status === 'LOADING'}>Send</Button>
+          <Button type="submit" isLoading={isLoading}>Send</Button>
         </Form>
       )}
     </Formik>

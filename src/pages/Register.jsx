@@ -1,45 +1,56 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
-import auth from '../repositories/auth.repo';
+import { useEffect } from 'react';
 import BackButton from '../components/buttons/BackButton';
 import * as Validation from '../helpers/validation';
 import Button from '../components/buttons/Button';
 import CenteredCard from '../components/card/CenteredCard';
+import * as authAction from '../redux/asyncActions/auth';
+import * as authReducersAction from '../redux/reducers/auth';
+import Alert from '../components/alert/Alert';
 
 function Register() {
-  const [state, setState] = useState({ status: 'INITIAL' });
   const navigate = useNavigate();
+  const store = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const submitAction = async ({ email, password }) => {
-    setState({ status: 'LOADING' });
-    try {
-      const form = {
-        email,
-        password,
-      };
-      const encoded = new URLSearchParams(form);
-      const res = await auth.register(encoded.toString());
-      window.localStorage.setItem('token', res.data.access_token);
-      navigate('/');
-    } catch (error) {
-      setState({ status: 'ERROR' });
-    }
+  const submitAction = async (val) => {
+    dispatch(authAction.register(val));
   };
+
+  useEffect(() => {
+    if (store.status === `${authAction.registerActionType}/fulfilled`) {
+      localStorage.setItem('token', store.data.access_token);
+      dispatch(authReducersAction.handleReset());
+      navigate('/');
+    }
+    if (store.status === `${authAction.registerActionType}/rejected`) {
+      setTimeout(() => {
+        dispatch(authReducersAction.handleReset());
+      }, 1500);
+    }
+  }, [store]);
   return (
-    <CenteredCard>
-      <div>
-        <div className="card-title">Register</div>
-        <RegisterForm className="card-body" onSubmit={submitAction} status={state.status} />
-        <div className="card-actions justify-end">
-          <BackButton />
+    <>
+      {store.status === `${authAction.registerActionType}/rejected` ? (
+        <Alert type="alert-error">{`Register Failed ${store.error?.message}`}</Alert>
+      ) : null}
+      <CenteredCard>
+        <div>
+          <div className="card-title">Register</div>
+          <RegisterForm className="card-body" onSubmit={submitAction} isLoading={store.status === `${authAction.registerActionType}/pending`} />
+          <div className="card-actions justify-end">
+            <BackButton />
+          </div>
         </div>
-      </div>
-    </CenteredCard>
+      </CenteredCard>
+    </>
   );
 }
 
-function RegisterForm({ onSubmit, status }) {
+function RegisterForm({ onSubmit, isLoading }) {
   return (
     <Formik
       initialValues={{
@@ -59,7 +70,7 @@ function RegisterForm({ onSubmit, status }) {
             <div className="form-error-msg">{errors.password}</div>
           ) : null}
           <br />
-          <Button type="submit" isLoading={status === 'LOADING'}>Register</Button>
+          <Button type="submit" isLoading={isLoading}>Register</Button>
         </Form>
       )}
     </Formik>
