@@ -4,7 +4,8 @@ import { Formik, Form, Field } from 'formik';
 import auth from '../repositories/auth.repo';
 import BackButton from '../components/buttons/BackButton';
 import * as Validation from '../helpers/validation';
-import MyButton from '../components/buttons/MyButton';
+import Button from '../components/buttons/Button';
+import CenteredCard from '../components/card/CenteredCard';
 
 function Register() {
   const [state, setState] = useState({ status: 'INITIAL' });
@@ -26,11 +27,15 @@ function Register() {
     }
   };
   return (
-    <>
-      <div className="heading">Register</div>
-      <RegisterForm onSubmit={submitAction} status={state.status} />
-      <BackButton />
-    </>
+    <CenteredCard>
+      <div>
+        <div className="card-title">Register</div>
+        <RegisterForm className="card-body" onSubmit={submitAction} status={state.status} />
+        <div className="card-actions justify-end">
+          <BackButton />
+        </div>
+      </div>
+    </CenteredCard>
   );
 }
 
@@ -46,15 +51,15 @@ function RegisterForm({ onSubmit, status }) {
     >
       {({ errors, touched }) => (
         <Form>
-          <Field name="email" type="email" placeholder="Email" />
+          <Field className="form" name="email" type="email" placeholder="Email" />
           {errors.email && touched.email ? <div className="form-error-msg">{errors.email}</div> : null}
           <br />
-          <Field name="password" type="password" placeholder="Password" />
+          <Field className="form" name="password" type="password" placeholder="Password" />
           {errors.password && touched.password ? (
             <div className="form-error-msg">{errors.password}</div>
           ) : null}
           <br />
-          <MyButton type="submit" isLoading={status === 'LOADING'}>Register</MyButton>
+          <Button type="submit" isLoading={status === 'LOADING'}>Register</Button>
         </Form>
       )}
     </Formik>

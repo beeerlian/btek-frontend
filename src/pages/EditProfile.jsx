@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as profileAction from '../redux/asyncActions/profile';
-import MyButton from '../components/buttons/MyButton';
+import Button from '../components/buttons/Button';
 import BackButton from '../components/buttons/BackButton';
 
 function EditProfile() {
@@ -64,7 +64,7 @@ function EditProfileForm({ onSubmit, status, initial }) {
           <Field name="birthDate" type="text" placeholder="Birt Date" />
           {errors.birthDate && touched.birthDate ? (<div className="form-error-msg">{errors.birthDate}</div>) : null}
           <br />
-          <MyButton type="submit" isLoading={status === 'pending'}>Save</MyButton>
+          <Button type="submit" isLoading={status === 'pending'}>Save</Button>
         </Form>
       )}
     </Formik>

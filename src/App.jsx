@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import RequireAuth from './components/RequireAuth';
-import './assets/css/style.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Profile from './pages/Profile';

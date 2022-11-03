@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
 function BackButton({ children, replace }) {
   const navigate = useNavigate();
 
   return (
-    <button type="button" onClick={() => { navigate(-1, { replace }); }}>
+    <Button type="button" onClick={() => { navigate(-1, { replace }); }}>
       {children ?? 'Back'}
-    </button>
+    </Button>
   );
 }
 

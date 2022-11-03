@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import MyButton from './buttons/MyButton';
+import MyButton from './buttons/Button';
 
 export default function MyDialog({
   open, handleToClose, title, desc,

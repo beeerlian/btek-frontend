@@ -30,7 +30,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(authActions.login.rejected, (state, action) => {
       state.status = action.type;
-      state.data = action.payload.error;
+      state.data = action.error;
     });
     builder.addCase(authActions.login.pending, (state, action) => {
       state.status = action.type;
@@ -41,7 +41,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(authActions.register.rejected, (state, action) => {
       state.status = action.type;
-      state.data = action.payload.error;
+      state.data = action.error;
     });
     builder.addCase(authActions.register.pending, (state, action) => {
       state.status = action.type;

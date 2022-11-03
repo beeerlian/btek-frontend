@@ -5,8 +5,9 @@ import { Formik, Form, Field } from 'formik';
 import authRepo from '../repositories/auth.repo';
 import * as Validation from '../helpers/validation';
 import BackButton from '../components/buttons/BackButton';
-import MyButton from '../components/buttons/MyButton';
+import Button from '../components/buttons/Button';
 import MyDialog from '../components/MyDialog';
+import CenteredCard from '../components/card/CenteredCard';
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -39,25 +40,19 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="forgot-password">
-      <div>Forgot Password</div>
-      <ForgotPasswordForm onSubmit={forgotPassword} status={state.status} />
-      <button
-        type="button"
-        onClick={() => {
-          navigate('/reset-password', { replace: true });
-        }}
-      >
-        Reset Password
-      </button>
-      <BackButton />
-      <MyDialog
-        open={state.status === 'ERROR' || state.status === 'SUCCESS'}
-        title={state.status === 'ERROR' ? 'Opps' : state.status === 'SUCCESS' ? 'Success' : ''}
-        desc={state.message}
-        handleToClose={handleCloseDialog}
-      />
-    </div>
+    <CenteredCard>
+      <div>
+        <div className="card-title">Forgot Password</div>
+        <ForgotPasswordForm onSubmit={forgotPassword} status={state.status} />
+        <BackButton />
+        <MyDialog
+          open={state.status === 'ERROR' || state.status === 'SUCCESS'}
+          title={state.status === 'ERROR' ? 'Opps' : state.status === 'SUCCESS' ? 'Success' : ''}
+          desc={state.message}
+          handleToClose={handleCloseDialog}
+        />
+      </div>
+    </CenteredCard>
   );
 }
 
@@ -72,10 +67,10 @@ function ForgotPasswordForm({ onSubmit, status }) {
     >
       {({ errors, touched }) => (
         <Form>
-          <Field name="email" type="email" />
+          <Field className="form" name="email" type="email" />
           {errors.email && touched.email ? <div className="form-error-msg">{errors.email}</div> : null}
           <br />
-          <MyButton type="submit" isLoading={status === 'LOADING'}>Send</MyButton>
+          <Button type="submit" isLoading={status === 'LOADING'}>Send</Button>
         </Form>
       )}
     </Formik>

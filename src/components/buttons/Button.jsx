@@ -1,10 +1,10 @@
-function MyButton({
+function Button({
   children,
   onClick, type, isLoading,
 }) {
   return (
     <button
-      // className="buttonload"
+      className="btn"
       // eslint-disable-next-line react/button-has-type
       type={`${type || 'button'}`}
       disabled={isLoading}
@@ -16,4 +16,4 @@ function MyButton({
   );
 }
 
-export default MyButton;
+export default Button;

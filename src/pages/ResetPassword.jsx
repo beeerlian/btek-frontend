@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Validation from '../helpers/validation';
-import MyButton from '../components/buttons/MyButton';
+import Button from '../components/buttons/Button';
 import BackButton from '../components/buttons/BackButton';
 import MyDialog from '../components/MyDialog';
 
@@ -92,7 +92,7 @@ function LoginForm({ onSubmit, status }) {
           <Field name="confirmPassword" type="password" placeholder="Confirm Password" />
           {errors.confirmPassword && touched.confirmPassword ? (<div className="form-error-msg">{errors.confirmPassword}</div>) : null}
           <br />
-          <MyButton type="submit" isLoading={status === 'LOADING'}>Reset Password</MyButton>
+          <Button type="submit" isLoading={status === 'LOADING'}>Reset Password</Button>
         </Form>
       )}
     </Formik>
