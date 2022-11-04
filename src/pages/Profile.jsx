@@ -36,7 +36,7 @@ function Profile({ token }) {
         <div className="place-items-center">
           <div className="avatar self-center">
             <div className=" rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 self-center">
-              <img src={`http://localhost:8081/assets/uploads/${store.profile?.picture}`} alt={store.profile?.fullName} />
+              <img src={`${import.meta.env.VITE_API_URL}/assets/uploads/${store.profile?.picture}`} alt={store.profile?.fullName} />
             </div>
           </div>
           <div className="card-body items-center text-center">
