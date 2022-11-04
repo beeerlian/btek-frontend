@@ -9,6 +9,7 @@ import Button from '../components/buttons/Button';
 import CenteredCard from '../components/card/CenteredCard';
 import * as authAction from '../redux/asyncActions/auth';
 import * as authReducersAction from '../redux/reducers/auth';
+import * as authorizationAction from '../redux/reducers/authorization';
 import Alert from '../components/alert/Alert';
 
 function Register() {
@@ -22,7 +23,7 @@ function Register() {
 
   useEffect(() => {
     if (store.status === `${authAction.registerActionType}/fulfilled`) {
-      localStorage.setItem('token', store.data.access_token);
+      dispatch(authorizationAction.handleSetToken(store.data.access_token));
       dispatch(authReducersAction.handleReset());
       navigate('/');
     }

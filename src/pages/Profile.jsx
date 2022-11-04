@@ -10,13 +10,13 @@ import BackButton from '../components/buttons/BackButton';
 import Button from '../components/buttons/Button';
 import CenteredCard from '../components/card/CenteredCard';
 
-function Profile() {
+function Profile({ token }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const store = useSelector((state) => state.profile);
 
   const getProfileData = () => {
-    dispatch(profileAction.getProfile());
+    dispatch(profileAction.getProfile(token));
   };
 
   useEffect(() => {

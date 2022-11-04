@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import CenteredCard from '../components/card/CenteredCard';
 import Button from '../components/buttons/Button';
+import * as authorizationAction from '../redux/reducers/authorization';
 
 function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const logout = () => {
     window.localStorage.removeItem('token');
+    dispatch(authorizationAction.handleReset());
     navigate('./login', { replace: true });
   };
   return (

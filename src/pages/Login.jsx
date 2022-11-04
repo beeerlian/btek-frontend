@@ -8,6 +8,7 @@ import * as Validation from '../helpers/validation';
 import Button from '../components/buttons/Button';
 import CenteredCard from '../components/card/CenteredCard';
 import Alert from '../components/alert/Alert';
+import * as authorizationAction from '../redux/reducers/authorization';
 
 function Login() {
   const dispatch = useDispatch();
@@ -24,8 +25,8 @@ function Login() {
 
   useEffect(() => {
     if (store.status === `${authAction.loginActionType}/fulfilled`) {
-      localStorage.setItem('token', store.data.access_token);
       dispatch(authReducersAction.handleReset());
+      dispatch(authorizationAction.handleSetToken(store.data.access_token));
       navigate('/');
     }
     if (store.status === `${authAction.loginActionType}/rejected`) {

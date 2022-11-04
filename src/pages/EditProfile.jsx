@@ -6,8 +6,9 @@ import * as profileAction from '../redux/asyncActions/profile';
 import Button from '../components/buttons/Button';
 import BackButton from '../components/buttons/BackButton';
 import CenteredCard from '../components/card/CenteredCard';
+import Alert from '../components/alert/Alert';
 
-function EditProfile() {
+function EditProfile({ token }) {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.profile);
   const location = useLocation();
@@ -25,7 +26,11 @@ function EditProfile() {
   }, [image]);
 
   const updateProfile = (val) => {
-    dispatch(profileAction.updateProfile({ ...val, image }));
+    const data = {
+      token,
+      val: { ...val, image },
+    };
+    dispatch(profileAction.updateProfile(data));
   };
 
   useEffect(() => {
@@ -36,6 +41,9 @@ function EditProfile() {
 
   return (
     <div className="edit-profile">
+      {store.status === `${profileAction.updateProfileActionType}/rejected` ? (
+        <Alert type="alert-error">{`Failed ${store.error?.message}`}</Alert>
+      ) : null}
       <CenteredCard>
         <div className="text-center">
           <div className="card-title mb-4">Edit Profile</div>
@@ -68,7 +76,6 @@ function EditProfileForm({
 }) {
   const onImagePicked = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     setImage(file);
   };
   return (
