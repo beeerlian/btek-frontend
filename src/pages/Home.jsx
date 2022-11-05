@@ -8,7 +8,6 @@ function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const logout = () => {
-    window.localStorage.removeItem('token');
     dispatch(authorizationAction.handleReset());
     navigate('./login', { replace: true });
   };

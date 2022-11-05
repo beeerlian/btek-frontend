@@ -4,13 +4,13 @@ function Button({
 }) {
   return (
     <button
-      className="btn"
+      className={`btn ${isLoading ? 'loading' : ''}`}
       // eslint-disable-next-line react/button-has-type
       type={`${type || 'button'}`}
       disabled={isLoading}
       onClick={onClick}
     >
-      {isLoading ? <i className="fa fa-circle-o-notch fa-spin" /> : (children ?? 'Click') }
+      {(children ?? 'Click') }
 
     </button>
   );

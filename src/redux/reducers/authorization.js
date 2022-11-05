@@ -15,7 +15,6 @@ export const authorizationSlice = createSlice({
     },
     handleSetToken: (state, action) => {
       state.token = action.payload;
-      localStorage.setItem('token', action.payload);
     },
     extraReducers: () => { },
   },

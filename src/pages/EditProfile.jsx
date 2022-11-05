@@ -102,7 +102,7 @@ function EditProfileForm({
           <br />
           <div className="card-actions justify-center">
             <BackButton>Back</BackButton>
-            <Button type="submit" isLoading={status === 'pending'}>Save</Button>
+            <Button type="submit" isLoading={status === `${profileAction.updateProfileActionType}/pending`}>Save</Button>
           </div>
         </Form>
       )}

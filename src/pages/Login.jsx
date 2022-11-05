@@ -79,7 +79,7 @@ function LoginForm({ onSubmit, status }) {
             <div className="form-error-msg">{errors.password}</div>
           ) : null}
           <p className="text-end"><Link className="link link-primary" to="/forgot-password">Forgot password?</Link></p>
-          <Button type="submit" isLoading={status === 'LOADING'}>Login</Button>
+          <Button type="submit" isLoading={status === `${authAction.loginActionType}/pending`}>Login</Button>
 
         </Form>
       )}

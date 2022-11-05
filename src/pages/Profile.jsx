@@ -36,12 +36,12 @@ function Profile({ token }) {
         <div className="place-items-center">
           <div className="avatar self-center">
             <div className=" rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 self-center">
-              <img src={`${store.profile?.picture}`} alt={store.profile?.fullName} />
+              <img src={`${store.profile?.picture ?? 'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg'}`} alt={store.profile?.fullName} />
             </div>
           </div>
           <div className="card-body items-center text-center">
-            <h2 className="card-title">{store.profile?.fullName}</h2>
-            <p>{store.profile?.birthDate}</p>
+            <h2 className="card-title">{store.profile?.fullName ?? 'Nama belum diset'}</h2>
+            <p>{store.profile?.birthDate ?? 'Tanggal lahir belum diset'}</p>
             <div className="card-actions justify-end">
               <BackButton>Back</BackButton>
               <Button className="btn btn-primary" onClick={() => { navigate('/profile/edit', { state: store.profile }); }}>Edit</Button>
