@@ -20,7 +20,7 @@ const ResetPassSchema = Yup.object().shape({
     .minLowercase(1, 'Must contain at least 1 Lower Case')
     .minUppercase(1, 'Must contain at least 1 Upper Case')
     .minNumbers(1, 'Must contain at least 1 Number')
-    .minSymbols(1, 'Must contain at least 1 Symbols')
+    .minSymbols(1, 'Must contain at least 1 Symbol')
     .required('Required'),
   confirmPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   email: Yup.string().email('Invalid email').required('Required'),
