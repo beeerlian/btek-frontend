@@ -24,9 +24,9 @@ const ResetPassSchema = Yup.object().shape({
     .required('Required'),
   confirmPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   email: Yup.string().email('Invalid email').required('Required'),
-  code: Yup.string()
+  code: Yup.number()
     .required()
-    .matches(/^[0-9]+$/, 'Must be only digits')
+    // .matches(/^[0-9]+$/, 'Must be only digits')
     .min(6, 'Must be exactly 6 digits')
     .max(6, 'Must be exactly 6 digits'),
 });
