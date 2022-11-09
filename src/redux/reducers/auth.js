@@ -25,6 +25,7 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(authActions.login.fulfilled, (state, action) => {
+      localStorage.setItem('isLoggedIn', 'true');
       state.status = action.type;
       state.data = action.payload.result;
     });

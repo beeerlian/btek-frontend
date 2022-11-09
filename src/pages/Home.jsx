@@ -9,6 +9,7 @@ function Home() {
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(authorizationAction.handleReset());
+    localStorage.removeItem('isLoggedIn');
     navigate('./login', { replace: true });
   };
   return (
